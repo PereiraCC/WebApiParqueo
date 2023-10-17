@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Empleados\" />
     <Folder Include="Parqueos\" />
     <Folder Include="Tiquetes\" />
   </ItemGroup>

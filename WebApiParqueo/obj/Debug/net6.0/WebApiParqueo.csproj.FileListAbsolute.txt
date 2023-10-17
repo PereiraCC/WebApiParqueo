@@ -19,3 +19,15 @@ C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\obj\De
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\obj\Debug\net6.0\WebApiParqueo.pdb
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\obj\Debug\net6.0\WebApiParqueo.genruntimeconfig.cache
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\obj\Debug\net6.0\ref\WebApiParqueo.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\BusinessLogic.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\DataAccess.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\Models.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\BusinessLogic.pdb
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\Models.pdb
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\DataAccess.pdb
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\obj\Debug\net6.0\WebApiParqueo.csproj.CopyComplete
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\Microsoft.OpenApi.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\WebApiParqueo\obj\Debug\net6.0\WebApiParqueo.MvcApplicationPartsAssemblyInfo.cs
