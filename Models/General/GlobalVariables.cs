@@ -16,5 +16,9 @@ namespace Models.General
         public static List<Parqueos.Parqueo> Parqueos;
 
         public static List<Parqueos.Parqueo> ParqueosFiltrados;
+
+        public static List<Tiquetes.Tiquete> Tiquetes;
+
+        public static List<Tiquetes.Tiquete> TiquetesFiltrados;
     }
 }
