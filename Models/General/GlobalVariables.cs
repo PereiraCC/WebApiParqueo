@@ -12,5 +12,9 @@ namespace Models.General
         public static List<Empleados.Empleados> Empleados;
 
         public static List<Empleados.Empleados> EmpleadosFiltrados;
+
+        public static List<Parqueos.Parqueo> Parqueos;
+
+        public static List<Parqueos.Parqueo> ParqueosFiltrados;
     }
 }

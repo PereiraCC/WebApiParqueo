@@ -9,9 +9,11 @@ builder.Services.AddControllers();
 
 // Interfaces DataAccess
 builder.Services.AddScoped<DataAccess.Interfaces.IEmpleadosDA, DataAccess.Class.EmpleadosDA>();
+builder.Services.AddScoped<DataAccess.Interfaces.IParqueoDA, DataAccess.Class.ParqueoDA>();
 
 // Interfaces BusinessLogic
 builder.Services.AddScoped<BusinessLogic.Interfaces.IEmpleadosBL, BusinessLogic.Class.EmpleadosBL>();
+builder.Services.AddScoped<BusinessLogic.Interfaces.IParqueoBL, BusinessLogic.Class.ParqueoBL>();
 
 // Se realiza la inicializacion de los objetos
 Models.General.GlobalVariables.Empleados = new List<Models.Empleados.Empleados>();
@@ -30,6 +32,19 @@ Models.General.GlobalVariables.Empleados.Add(new Models.Empleados.Empleados(){
     CorreoElectronico = "carlos@test.com",
     Telefono = "89885718",
     PersonaContacto = "Carlos"
+});
+
+// Se realiza la inicializacion de los objetos
+Models.General.GlobalVariables.Parqueos = new List<Models.Parqueos.Parqueo>();
+Models.General.GlobalVariables.Parqueos.Add(new Models.Parqueos.Parqueo()
+{
+    idParqueo = 1,
+    Nombre = "Premium",
+    CantidadMaximaVehiculos = 50,
+    HoraApertura = DateTime.Now,
+    HoraCierre = DateTime.Now,
+    TarifaHora = 1000,
+    TarifaMediaHora = 500,
 });
 
 var app = builder.Build();
