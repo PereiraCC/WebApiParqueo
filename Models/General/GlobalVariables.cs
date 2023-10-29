@@ -20,5 +20,9 @@ namespace Models.General
         public static List<Tiquetes.Tiquete> Tiquetes;
 
         public static List<Tiquetes.Tiquete> TiquetesFiltrados;
+
+        public static Estadistica.Estadistica Estadistica;
+
+        public static Estadistica.Estadistica EstadisticaFiltrados;
     }
 }

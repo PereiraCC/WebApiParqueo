@@ -11,11 +11,13 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<DataAccess.Interfaces.IEmpleadosDA, DataAccess.Class.EmpleadosDA>();
 builder.Services.AddScoped<DataAccess.Interfaces.IParqueoDA, DataAccess.Class.ParqueoDA>();
 builder.Services.AddScoped<DataAccess.Interfaces.ITiqueteDA, DataAccess.Class.TiqueteDA>();
+builder.Services.AddScoped<DataAccess.Interfaces.IEstadisticaDA, DataAccess.Class.EstadisticaDA>();
 
 // Interfaces BusinessLogic
 builder.Services.AddScoped<BusinessLogic.Interfaces.IEmpleadosBL, BusinessLogic.Class.EmpleadosBL>();
 builder.Services.AddScoped<BusinessLogic.Interfaces.IParqueoBL, BusinessLogic.Class.ParqueoBL>();
 builder.Services.AddScoped<BusinessLogic.Interfaces.ITiqueteBL, BusinessLogic.Class.TiqueteBL>();
+builder.Services.AddScoped<BusinessLogic.Interfaces.IEstadisticaBL, BusinessLogic.Class.EstadisticaBL>();
 
 // Se realiza la inicializacion de los objetos
 Models.General.GlobalVariables.Empleados = new List<Models.Empleados.Empleados>();
@@ -65,6 +67,30 @@ Models.General.GlobalVariables.Tiquetes.Add(new Models.Tiquetes.Tiquete()
     tiempoConsumido = "03:00:00",
     montoPagar = 3000
 });
+
+// Se realiza la inicializacion de los objetos
+Models.General.GlobalVariables.Estadistica = new Models.Estadistica.Estadistica();
+Models.General.GlobalVariables.EstadisticaFiltrados = new Models.Estadistica.Estadistica();
+
+List<Models.Estadistica.Venta> ventas = new List<Models.Estadistica.Venta>();
+ventas.Add(new Models.Estadistica.Venta()
+{
+    idVenta = 1,
+    NombreParqueo = "Premium",
+    NombreEmpleado = "Carlos",
+    fechaIngreso = DateTime.Now,
+    fechaSalida = DateTime.Now,
+    placa = "ASD123",
+    tiempoConsumido = "03:00:00",
+    montoPagar = 3000
+});
+
+Models.General.GlobalVariables.Estadistica = new Models.Estadistica.Estadistica()
+{
+    idEstadistica = 1,
+    montoGenerado = 3000,
+    ventas = ventas
+};
 
 var app = builder.Build();
 
