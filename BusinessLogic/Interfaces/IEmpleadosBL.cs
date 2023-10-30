@@ -15,5 +15,7 @@ namespace BusinessLogic.Interfaces
         Models.General.ResponseGeneric<List<Models.Empleados.Empleados>> searchValue(string valor, Models.Enums.EnumSearchEmpleados tipo);
 
         Models.General.ResponseGeneric<List<Models.Empleados.Empleados>> deleteValue(int idEmpleado);
+
+        Models.General.ResponseGeneric<List<Models.Empleados.Empleados>> getAll();
     }
 }

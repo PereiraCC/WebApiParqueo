@@ -113,5 +113,17 @@ namespace DataAccess.Class
                 throw ex;
             }
         }
+
+        public ResponseGeneric<List<Empleados>> getAll()
+        {
+            try
+            {
+                return new ResponseGeneric<List<Empleados>>(GlobalVariables.Empleados);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

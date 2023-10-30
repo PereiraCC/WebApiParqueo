@@ -39,5 +39,10 @@ namespace BusinessLogic.Class
         {
             return _Empleados.searchValue(valor, tipo);
         }
+
+        public ResponseGeneric<List<Empleados>> getAll()
+        {
+            return _Empleados.getAll();
+        }
     }
 }

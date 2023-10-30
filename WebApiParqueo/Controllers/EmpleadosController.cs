@@ -86,5 +86,19 @@ namespace WebApiParqueo.Controllers
                 return new ResponseGeneric<List<Empleados>>(ex);
             }
         }
+
+        [HttpPost]
+        [Route("/api/[controller]/[action]")]
+        public ResponseGeneric<List<Empleados>> GetAll()
+        {
+            try
+            {
+                return _empleadosBL.getAll();
+            }
+            catch (Exception ex)
+            {
+                return new ResponseGeneric<List<Empleados>>(ex);
+            }
+        }
     }
 }
