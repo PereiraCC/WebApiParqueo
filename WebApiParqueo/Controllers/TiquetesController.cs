@@ -90,5 +90,19 @@ namespace WebApiParqueo.Controllers
                 return new ResponseGeneric<List<Tiquete>>(ex);
             }
         }
+
+        [HttpPost]
+        [Route("/api/[controller]/[action]")]
+        public ResponseGeneric<List<Tiquete>> GetAll()
+        {
+            try
+            {
+                return _tiqueteBL.getAll();
+            }
+            catch (Exception ex)
+            {
+                return new ResponseGeneric<List<Tiquete>>(ex);
+            }
+        }
     }
 }

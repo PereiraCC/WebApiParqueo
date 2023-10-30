@@ -39,5 +39,10 @@ namespace BusinessLogic.Class
         {
             return _Tiquete.searchValue(valor, tipo);
         }
+
+        public ResponseGeneric<List<Tiquete>> getAll()
+        {
+            return _Tiquete.getAll();
+        }
     }
 }

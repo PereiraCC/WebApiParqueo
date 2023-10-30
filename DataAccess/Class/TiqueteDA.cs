@@ -107,5 +107,17 @@ namespace DataAccess.Class
                 throw ex;
             }
         }
+
+        public ResponseGeneric<List<Tiquete>> getAll()
+        {
+            try
+            {
+                return new ResponseGeneric<List<Tiquete>>(GlobalVariables.Tiquetes);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

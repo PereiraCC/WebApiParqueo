@@ -15,5 +15,7 @@ namespace DataAccess.Interfaces
         Models.General.ResponseGeneric<List<Models.Tiquetes.Tiquete>> searchValue(string valor, Models.Enums.EnumSearchTiquete tipo);
 
         Models.General.ResponseGeneric<List<Models.Tiquetes.Tiquete>> deleteValue(int idTiquete);
+
+        Models.General.ResponseGeneric<List<Models.Tiquetes.Tiquete>> getAll();
     }
 }
