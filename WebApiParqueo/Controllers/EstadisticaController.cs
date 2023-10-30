@@ -62,6 +62,20 @@ namespace WebApiParqueo.Controllers
                 return new ResponseGeneric<Estadistica>(ex);
             }
         }
-        
+
+        [HttpPost]
+        [Route("/api/[controller]/[action]")]
+        public ResponseGeneric<Estadistica> GetAll()
+        {
+            try
+            {
+                return _estadisticaBL.getAll();
+            }
+            catch (Exception ex)
+            {
+                return new ResponseGeneric<Estadistica>(ex);
+            }
+        }
+
     }
 }

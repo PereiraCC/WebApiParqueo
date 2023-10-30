@@ -119,6 +119,18 @@ namespace DataAccess.Class
                 throw ex;
             }
         }
+
+        public ResponseGeneric<Estadistica> getAll()
+        {
+            try
+            {
+                return new ResponseGeneric<Estadistica>(GlobalVariables.Estadistica);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 
     internal class VentasParqueos

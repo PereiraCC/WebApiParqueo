@@ -30,5 +30,10 @@ namespace BusinessLogic.Class
         {
             return _Estadistica.searchValue(valor, tipo);
         }
+
+        public ResponseGeneric<Estadistica> getAll()
+        {
+            return _Estadistica.getAll();
+        }
     }
 }
