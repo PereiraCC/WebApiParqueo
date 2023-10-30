@@ -39,5 +39,10 @@ namespace BusinessLogic.Class
         {
             return _Parqueo.searchValue(valor, tipo);
         }
+
+        public ResponseGeneric<List<Parqueo>> getAll()
+        {
+            return _Parqueo.getAll();
+        }
     }
 }

@@ -107,5 +107,17 @@ namespace DataAccess.Class
                 throw ex;
             }
         }
+
+        public ResponseGeneric<List<Parqueo>> getAll()
+        {
+            try
+            {
+                return new ResponseGeneric<List<Parqueo>>(GlobalVariables.Parqueos);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

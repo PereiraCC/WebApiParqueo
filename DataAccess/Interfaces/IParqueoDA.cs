@@ -15,5 +15,7 @@ namespace DataAccess.Interfaces
         Models.General.ResponseGeneric<List<Models.Parqueos.Parqueo>> searchValue(string valor, Models.Enums.EnumSearchParqueo tipo);
 
         Models.General.ResponseGeneric<List<Models.Parqueos.Parqueo>> deleteValue(int idParqueo);
+
+        Models.General.ResponseGeneric<List<Models.Parqueos.Parqueo>> getAll();
     }
 }
