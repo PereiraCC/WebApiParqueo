@@ -52,6 +52,16 @@ Models.General.GlobalVariables.Parqueos.Add(new Models.Parqueos.Parqueo()
     TarifaHora = 1000,
     TarifaMediaHora = 500,
 });
+Models.General.GlobalVariables.Parqueos.Add(new Models.Parqueos.Parqueo()
+{
+    idParqueo = 2,
+    Nombre = "Normal",
+    CantidadMaximaVehiculos = 50,
+    HoraApertura = DateTime.Now,
+    HoraCierre = DateTime.Now,
+    TarifaHora = 1000,
+    TarifaMediaHora = 500,
+});
 
 // Se realiza la inicializacion de los objetos
 Models.General.GlobalVariables.Tiquetes = new List<Models.Tiquetes.Tiquete>();
