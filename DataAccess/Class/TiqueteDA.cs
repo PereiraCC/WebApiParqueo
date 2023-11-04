@@ -22,7 +22,7 @@ namespace DataAccess.Class
                 // Se agrega el nuevo empleado
                 GlobalVariables.Tiquetes.Add(tiquete);
 
-                return new ResponseGeneric<List<Tiquete>>(GlobalVariables.Tiquetes);
+                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.General));
             }
             catch (Exception ex)
             {
@@ -45,7 +45,7 @@ namespace DataAccess.Class
                 // Se eliminar el tiquete
                 Models.General.GlobalVariables.Tiquetes.RemoveAt(indexTiquete);
 
-                return new ResponseGeneric<List<Tiquete>>(GlobalVariables.Tiquetes);
+                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.General));
             }
             catch (Exception ex)
             {
@@ -69,7 +69,7 @@ namespace DataAccess.Class
                     GlobalVariables.Tiquetes[indexTiquete].tiempoConsumido = tiquete.tiempoConsumido;
                 }
 
-                return new ResponseGeneric<List<Tiquete>>(GlobalVariables.Tiquetes);
+                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.General));
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace DataAccess.Class
                         break;
                 }
 
-                return new ResponseGeneric<List<Tiquete>>(GlobalVariables.TiquetesFiltrados);
+                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.Filtrados));
             }
             catch (Exception ex)
             {
@@ -112,12 +112,52 @@ namespace DataAccess.Class
         {
             try
             {
-                return new ResponseGeneric<List<Tiquete>>(GlobalVariables.Tiquetes);
+                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.General));
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        private List<Tiquete> getTiquetes(TipoObtener type)
+        {
+            List<Tiquete> tiquetes = new List<Tiquete>();
+
+            List<Tiquete> tiquetesOriginales = new List<Tiquete>();
+
+            if(type == TipoObtener.General)
+            {
+                tiquetesOriginales = GlobalVariables.Tiquetes;
+            }
+            else
+            {
+                tiquetesOriginales = GlobalVariables.TiquetesFiltrados;
+            }
+
+            foreach (Tiquete tiquete in tiquetesOriginales)
+            {
+                tiquetes.Add(new Tiquete() { 
+                    idTiquete = tiquete.idTiquete,
+                    idParqueo = tiquete.idParqueo,
+                    nombreParqueo = GlobalVariables.Parqueos.Find(parqueo => parqueo.idParqueo == tiquete.idParqueo).Nombre,
+                    idEmpleado = tiquete.idEmpleado,
+                    nombreEmpleado = GlobalVariables.Empleados.Find(empleado => empleado.IdEmpleado == tiquete.idEmpleado).PrimerNombre + " " + GlobalVariables.Empleados.Find(empleado => empleado.IdEmpleado == tiquete.idEmpleado).PrimerApellido,
+                    fechaIngreso = tiquete.fechaIngreso,
+                    fechaSalida = tiquete.fechaSalida,
+                    montoPagar = tiquete.montoPagar,
+                    placa = tiquete.placa,
+                    tiempoConsumido = tiquete.tiempoConsumido
+                });
+            }
+
+            return tiquetes;
+        }
+
+        public enum TipoObtener
+        {
+            General,
+            Filtrados
         }
     }
 }
