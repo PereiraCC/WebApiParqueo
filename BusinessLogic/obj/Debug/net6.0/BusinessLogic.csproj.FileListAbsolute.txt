@@ -15,3 +15,5 @@ C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\BusinessLogic\obj\De
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\BusinessLogic\obj\Debug\net6.0\refint\BusinessLogic.dll
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\BusinessLogic\obj\Debug\net6.0\BusinessLogic.pdb
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\BusinessLogic\obj\Debug\net6.0\ref\BusinessLogic.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\BusinessLogic\bin\Debug\net6.0\BusinessLogic.runtimeconfig.json
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\BusinessLogic\obj\Debug\net6.0\BusinessLogic.genruntimeconfig.cache

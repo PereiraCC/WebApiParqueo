@@ -10,3 +10,5 @@ C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\Models\obj\Debug\net
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\Models\obj\Debug\net6.0\refint\Models.dll
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\Models\obj\Debug\net6.0\Models.pdb
 C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\Models\obj\Debug\net6.0\ref\Models.dll
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\Models\bin\Debug\net6.0\Models.runtimeconfig.json
+C:\Users\PereiraCoto\Desktop\ProyectoCursoWeb\WebApiParqueo\Models\obj\Debug\net6.0\Models.genruntimeconfig.cache
