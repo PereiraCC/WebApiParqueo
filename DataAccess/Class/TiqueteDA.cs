@@ -6,70 +6,55 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Interfaces;
+using Models.DTOs;
+using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Class
 {
     public class TiqueteDA : ITiqueteDA
     {
-        public TiqueteDA()
+        private ProyectoParqueoContext _parqueoEntity;
+
+        public TiqueteDA(IOptions<ConfiguracionParqueo> options)
         {
+            _parqueoEntity = new ProyectoParqueoContext(options.Value.ConnectionParqueo);
         }
 
-        public ResponseGeneric<List<Tiquete>> addValue(Tiquete tiquete)
+        public ResponseGeneric<List<Models.Tiquetes.Tiquete>> addValue(Models.Tiquetes.Tiquete tiquete)
         {
             try
             {
-                // Se agrega el nuevo empleado
-                GlobalVariables.Tiquetes.Add(tiquete);
+                Models.DTOs.Parqueo seletedParqueo = _parqueoEntity.Parqueos.Find(tiquete.idParqueo);
+                Models.DTOs.Empleado seletedEmpleado = _parqueoEntity.Empleados.Find(tiquete.idEmpleado);
 
-                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.General));
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public ResponseGeneric<List<Tiquete>> deleteValue(int idTiquete)
-        {
-            try
-            {
-                // Se busca el index de tiquete a eliminar
-                int indexTiquete = GlobalVariables.Tiquetes.FindIndex(tique => tique.idTiquete == idTiquete);
-
-                if (indexTiquete == -1)
+                // Se crea el modelo de Tiquete de Entity
+                Models.DTOs.Tiquete newTiquete = new Models.DTOs.Tiquete()
                 {
-                    return new ResponseGeneric<List<Tiquete>>("No se encontro el tiquete");
-                }
+                    Idparqueo = tiquete.idParqueo,
+                    NombreParqueo = (seletedParqueo != null) ? seletedParqueo.Nombre : "",
+                    Idempleado = tiquete.idEmpleado,
+                    NombreEmpleado = (seletedEmpleado == null) ? "" : seletedEmpleado.PrimerNombre + " " + seletedEmpleado.PrimerApellido,
+                    FechaIngreso = tiquete.fechaIngreso,
+                    FechaSalida = null,
+                    MontoPagar = null,
+                    Placa = tiquete.placa,
+                    TiempoConsumido = null,
+                    Venta = false
+                };
 
-                // Se eliminar el tiquete
-                Models.General.GlobalVariables.Tiquetes.RemoveAt(indexTiquete);
+                // Se guarda el registro
+                _parqueoEntity.Tiquetes.Add(newTiquete);
 
-                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.General));
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public ResponseGeneric<List<Tiquete>> editValue(Tiquete tiquete, int idTiquete)
-        {
-            try
-            {
-                // Se busca el index de tiquete a modificar
-                int indexTiquete = GlobalVariables.Tiquetes.FindIndex(tique => tique.idTiquete == idTiquete);
-
-                // Se valida que index sea correcto
-                if (indexTiquete != -1)
+                // Se valida que se guarda correctamente
+                if (_parqueoEntity.SaveChanges() == 1)
                 {
-                    // Se modifica el objeto
-                    GlobalVariables.Tiquetes[indexTiquete].fechaSalida = tiquete.fechaSalida;
-                    GlobalVariables.Tiquetes[indexTiquete].montoPagar = tiquete.montoPagar;
-                    GlobalVariables.Tiquetes[indexTiquete].tiempoConsumido = tiquete.tiempoConsumido;
+                    return new ResponseGeneric<List<Models.Tiquetes.Tiquete>>(formatTiquetes(_parqueoEntity.Tiquetes.ToList()));
                 }
-
-                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.General));
+                else
+                {
+                    return new ResponseGeneric<List<Models.Tiquetes.Tiquete>>("Error en el guardar un tiquete");
+                }
             }
             catch (Exception ex)
             {
@@ -77,30 +62,89 @@ namespace DataAccess.Class
             }
         }
 
-        public ResponseGeneric<List<Tiquete>> searchValue(string valor, Models.Enums.EnumSearchTiquete tipo)
+        public ResponseGeneric<List<Models.Tiquetes.Tiquete>> deleteValue(int idTiquete)
         {
             try
             {
+                // Se obtiene el parqueo a eliminar
+                Models.DTOs.Tiquete findTiquete = _parqueoEntity.Tiquetes.Find(idTiquete);
+
+                // Se elimina el empleado
+                _parqueoEntity.Entry(findTiquete).State = EntityState.Deleted;
+
+                // Se valida que se edita correctamente
+                if (_parqueoEntity.SaveChanges() == 1)
+                {
+                    return new ResponseGeneric<List<Models.Tiquetes.Tiquete>>(formatTiquetes(_parqueoEntity.Tiquetes.ToList()));
+                }
+                else
+                {
+                    return new ResponseGeneric<List<Models.Tiquetes.Tiquete>>("Error en el eliminar un tiquete");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ResponseGeneric<List<Models.Tiquetes.Tiquete>> editValue(Models.Tiquetes.Tiquete tiquete, int idTiquete)
+        {
+            try
+            {
+                //Se obtiene el empleado a editar
+                Models.DTOs.Tiquete findTiquete = _parqueoEntity.Tiquetes.Find(idTiquete);
+
+                // Se edita con los nuevo valores
+                findTiquete.FechaSalida = tiquete.fechaSalida;
+                findTiquete.MontoPagar = (tiquete.montoPagar != null) ? tiquete.montoPagar.ToString() : "0";
+                findTiquete.TiempoConsumido = tiquete.tiempoConsumido;
+                findTiquete.Venta = true;
+
+                // Se edita el registro
+                _parqueoEntity.Entry(findTiquete).State = EntityState.Modified;
+
+                // Se valida que se edita correctamente
+                if (_parqueoEntity.SaveChanges() == 1)
+                {
+                    return new ResponseGeneric<List<Models.Tiquetes.Tiquete>>(formatTiquetes(_parqueoEntity.Tiquetes.ToList()));
+                }
+                else
+                {
+                    return new ResponseGeneric<List<Models.Tiquetes.Tiquete>>("Error en el editar un tiquete");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ResponseGeneric<List<Models.Tiquetes.Tiquete>> searchValue(string valor, Models.Enums.EnumSearchTiquete tipo)
+        {
+            try
+            {
+                List<Models.DTOs.Tiquete> searchTiquete = new List<Models.DTOs.Tiquete>();
                 switch (tipo)
                 {
                     case Models.Enums.EnumSearchTiquete.Placa:
-                        GlobalVariables.TiquetesFiltrados = GlobalVariables.Tiquetes.Where(tiquete => tiquete.placa.Contains(valor)).ToList();
+                        searchTiquete = _parqueoEntity.Tiquetes.Where(tiquete => tiquete.Placa.Contains(valor)).ToList();
                         break;
 
                     case Models.Enums.EnumSearchTiquete.Numero:
-                        GlobalVariables.TiquetesFiltrados = GlobalVariables.Tiquetes.Where(tiquete => tiquete.idTiquete == Int32.Parse(valor)).ToList();
+                        searchTiquete = _parqueoEntity.Tiquetes.Where(tiquete => tiquete.Idtiquete == Int32.Parse(valor)).ToList();
                         break;
 
                     case Models.Enums.EnumSearchTiquete.Parqueo:
-                        GlobalVariables.TiquetesFiltrados = GlobalVariables.Tiquetes.Where(tiquete => tiquete.idParqueo == Int32.Parse(valor)).ToList();
+                        searchTiquete = _parqueoEntity.Tiquetes.Where(tiquete => tiquete.Idparqueo == Int32.Parse(valor)).ToList();
                         break;
 
                     case Models.Enums.EnumSearchTiquete.Empleado:
-                        GlobalVariables.TiquetesFiltrados = GlobalVariables.Tiquetes.Where(tiquete => tiquete.idEmpleado == Int32.Parse(valor)).ToList();
+                        searchTiquete = _parqueoEntity.Tiquetes.Where(tiquete => tiquete.Idempleado == Int32.Parse(valor)).ToList();
                         break;
                 }
 
-                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.Filtrados));
+                return new ResponseGeneric<List<Models.Tiquetes.Tiquete>>(formatTiquetes(searchTiquete));
             }
             catch (Exception ex)
             {
@@ -108,11 +152,11 @@ namespace DataAccess.Class
             }
         }
 
-        public ResponseGeneric<List<Tiquete>> getAll()
+        public ResponseGeneric<List<Models.Tiquetes.Tiquete>> getAll()
         {
             try
             {
-                return new ResponseGeneric<List<Tiquete>>(getTiquetes(TipoObtener.General));
+                return new ResponseGeneric<List<Models.Tiquetes.Tiquete>>(formatTiquetes(_parqueoEntity.Tiquetes.ToList()));
             }
             catch (Exception ex)
             {
@@ -120,44 +164,32 @@ namespace DataAccess.Class
             }
         }
 
-        private List<Tiquete> getTiquetes(TipoObtener type)
+        private List<Models.Tiquetes.Tiquete> formatTiquetes(List<Models.DTOs.Tiquete> tiquetes)
         {
-            List<Tiquete> tiquetes = new List<Tiquete>();
+            List<Models.Tiquetes.Tiquete> allTiquetes = new List<Models.Tiquetes.Tiquete>();
 
-            List<Tiquete> tiquetesOriginales = new List<Tiquete>();
+            foreach (Models.DTOs.Tiquete tiquete in tiquetes)
+            {
+                Models.DTOs.Parqueo seletedParqueo = _parqueoEntity.Parqueos.Find(tiquete.Idparqueo);
+                Models.DTOs.Empleado seletedEmpleado = _parqueoEntity.Empleados.Find(tiquete.Idempleado);
 
-            if(type == TipoObtener.General)
-            {
-                tiquetesOriginales = GlobalVariables.Tiquetes;
-            }
-            else
-            {
-                tiquetesOriginales = GlobalVariables.TiquetesFiltrados;
-            }
-
-            foreach (Tiquete tiquete in tiquetesOriginales)
-            {
-                tiquetes.Add(new Tiquete() { 
-                    idTiquete = tiquete.idTiquete,
-                    idParqueo = tiquete.idParqueo,
-                    nombreParqueo = GlobalVariables.Parqueos.Find(parqueo => parqueo.idParqueo == tiquete.idParqueo).Nombre,
-                    idEmpleado = tiquete.idEmpleado,
-                    nombreEmpleado = GlobalVariables.Empleados.Find(empleado => empleado.IdEmpleado == tiquete.idEmpleado).PrimerNombre + " " + GlobalVariables.Empleados.Find(empleado => empleado.IdEmpleado == tiquete.idEmpleado).PrimerApellido,
-                    fechaIngreso = tiquete.fechaIngreso,
-                    fechaSalida = tiquete.fechaSalida,
-                    montoPagar = tiquete.montoPagar,
-                    placa = tiquete.placa,
-                    tiempoConsumido = tiquete.tiempoConsumido
+                allTiquetes.Add(new Models.Tiquetes.Tiquete() { 
+                    idTiquete = tiquete.Idtiquete,
+                    idParqueo = tiquete.Idparqueo,
+                    nombreParqueo = (seletedParqueo != null) ? seletedParqueo.Nombre : "",
+                    idEmpleado = tiquete.Idempleado,
+                    nombreEmpleado = (seletedEmpleado == null) ? "" : seletedEmpleado.PrimerNombre + " " + seletedEmpleado.PrimerApellido,
+                    fechaIngreso = tiquete.FechaIngreso ?? DateTime.Now,
+                    fechaSalida = tiquete.FechaSalida ?? DateTime.Now,
+                    montoPagar = (tiquete.MontoPagar != null) ? float.Parse(tiquete.MontoPagar) : 0,
+                    placa = tiquete.Placa,
+                    tiempoConsumido = tiquete.TiempoConsumido,
+                    venta = tiquete.Venta
                 });
             }
 
-            return tiquetes;
+            return allTiquetes;
         }
 
-        public enum TipoObtener
-        {
-            General,
-            Filtrados
-        }
     }
 }

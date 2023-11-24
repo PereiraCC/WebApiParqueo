@@ -19,5 +19,6 @@ namespace Models.Tiquetes
         public string placa { get; set; }
         public float? montoPagar { get; set; }
         public string? tiempoConsumido { get; set; }
+        public bool? venta { get; set; }
     }
 }
