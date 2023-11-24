@@ -6,8 +6,11 @@ namespace Models.DTOs;
 
 public partial class ProyectoParqueoContext : DbContext
 {
-    public ProyectoParqueoContext()
+    private string connectionBD;
+
+    public ProyectoParqueoContext(string connectionBD)
     {
+        this.connectionBD = connectionBD;
     }
 
     public ProyectoParqueoContext(DbContextOptions<ProyectoParqueoContext> options)
@@ -21,10 +24,10 @@ public partial class ProyectoParqueoContext : DbContext
 
     public virtual DbSet<Tiquete> Tiquetes { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=PEREIRACOTO-PC\\PEREIRASERVER; Database=ProyectoParqueo; User=sa; Password=Datos.2020; Trusted_Connection=True; TrustServerCertificate=True;");
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer(connectionBD);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Empleado>(entity =>
