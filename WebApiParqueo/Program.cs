@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Models.DTOs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<ProyectoParqueoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionParqueo")));
 
 // Interfaces DataAccess
 builder.Services.AddScoped<DataAccess.Interfaces.IEmpleadosDA, DataAccess.Class.EmpleadosDA>();
@@ -117,5 +122,13 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
     options.DocumentTitle = "Web Api Parqueo";
 });
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<ProyectoParqueoContext>();
+    context.Database.EnsureCreated();
+}
 
 app.Run();
