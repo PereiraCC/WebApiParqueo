@@ -7,73 +7,48 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Interfaces;
+using Models.DTOs;
+using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Class
 {
     public class ParqueoDA : IParqueoDA
     {
-        public ParqueoDA()
+        private ProyectoParqueoContext _parqueoEntity;
+
+        public ParqueoDA(IOptions<ConfiguracionParqueo> options)
         {
+            _parqueoEntity = new ProyectoParqueoContext(options.Value.ConnectionParqueo);
         }
 
-        public ResponseGeneric<List<Parqueo>> addValue(Parqueo parqueo)
+        public ResponseGeneric<List<Models.Parqueos.Parqueo>> addValue(Models.Parqueos.Parqueo parqueo)
         {
             try
             {
-                // Se agrega el nuevo empleado
-                GlobalVariables.Parqueos.Add(parqueo);
-
-                return new ResponseGeneric<List<Parqueo>>(GlobalVariables.Parqueos);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public ResponseGeneric<List<Parqueo>> deleteValue(int idParqueo)
-        {
-            try
-            {
-                // Se busca el index de tiquete a eliminar
-                int indexParqueo = GlobalVariables.Parqueos.FindIndex(parqu => parqu.idParqueo == idParqueo);
-
-                if (indexParqueo == -1)
+                // Se crea el modelo de parqueo de Entity
+                Models.DTOs.Parqueo newParqueo = new Models.DTOs.Parqueo()
                 {
-                    return new ResponseGeneric<List<Parqueo>>("No se encontro el parqueo");
-                }
+                    Nombre = parqueo.Nombre,
+                    CantidadMaximaVehiculos = parqueo.CantidadMaximaVehiculos,
+                    HoraApertura = parqueo.HoraApertura,
+                    HoraCierre = parqueo.HoraCierre,
+                    TarifaHora = parqueo.TarifaHora,
+                    TarifaMediaHora = parqueo.TarifaMediaHora
+                };
 
-                // Se eliminar el tiquete
-                Models.General.GlobalVariables.Parqueos.RemoveAt(indexParqueo);
+                // Se guarda el registro
+                _parqueoEntity.Parqueos.Add(newParqueo);
 
-                return new ResponseGeneric<List<Parqueo>>(GlobalVariables.Parqueos);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public ResponseGeneric<List<Parqueo>> editValue(Parqueo parqueo, int idParqueo)
-        {
-            try
-            {
-                // Se busca el index de tiquete a modificar
-                int indexParqueo = GlobalVariables.Parqueos.FindIndex(parqu => parqu.idParqueo == idParqueo);
-
-                // Se valida que index sea correcto
-                if (indexParqueo != -1)
+                // Se valida que se guarda correctamente
+                if (_parqueoEntity.SaveChanges() == 1)
                 {
-                    // Se modifica el objeto
-                    GlobalVariables.Parqueos[indexParqueo].Nombre = parqueo.Nombre;
-                    GlobalVariables.Parqueos[indexParqueo].CantidadMaximaVehiculos = parqueo.CantidadMaximaVehiculos;
-                    GlobalVariables.Parqueos[indexParqueo].HoraApertura = parqueo.HoraApertura;
-                    GlobalVariables.Parqueos[indexParqueo].HoraCierre = parqueo.HoraCierre;
-                    GlobalVariables.Parqueos[indexParqueo].TarifaHora = parqueo.TarifaHora;
-                    GlobalVariables.Parqueos[indexParqueo].TarifaMediaHora = parqueo.TarifaMediaHora;
+                    return new ResponseGeneric<List<Models.Parqueos.Parqueo>>(formatParqueos(_parqueoEntity.Parqueos.ToList()));
                 }
-
-                return new ResponseGeneric<List<Parqueo>>(GlobalVariables.Parqueos);
+                else
+                {
+                    return new ResponseGeneric<List<Models.Parqueos.Parqueo>>("Error en el guardar un parqueo");
+                }
             }
             catch (Exception ex)
             {
@@ -81,26 +56,87 @@ namespace DataAccess.Class
             }
         }
 
-        public ResponseGeneric<List<Parqueo>> searchValue(string valor, Models.Enums.EnumSearchParqueo tipo)
+        public ResponseGeneric<List<Models.Parqueos.Parqueo>> deleteValue(int idParqueo)
         {
             try
             {
+                // Se obtiene el parqueo a eliminar
+                Models.DTOs.Parqueo findParqueo = _parqueoEntity.Parqueos.Find(idParqueo);
+
+                // Se elimina el empleado
+                _parqueoEntity.Entry(findParqueo).State = EntityState.Deleted;
+
+                // Se valida que se edita correctamente
+                if (_parqueoEntity.SaveChanges() == 1)
+                {
+                    return new ResponseGeneric<List<Models.Parqueos.Parqueo>>(formatParqueos(_parqueoEntity.Parqueos.ToList()));
+                }
+                else
+                {
+                    return new ResponseGeneric<List<Models.Parqueos.Parqueo>>("Error en el eliminar un parqueo");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ResponseGeneric<List<Models.Parqueos.Parqueo>> editValue(Models.Parqueos.Parqueo parqueo, int idParqueo)
+        {
+            try
+            {
+                //Se obtiene el empleado a editar
+                Models.DTOs.Parqueo findParqueo = _parqueoEntity.Parqueos.Find(idParqueo);
+
+                // Se edita con los nuevo valores
+                findParqueo.Nombre = parqueo.Nombre;
+                findParqueo.CantidadMaximaVehiculos = parqueo.CantidadMaximaVehiculos;
+                findParqueo.HoraApertura = parqueo.HoraApertura;
+                findParqueo.HoraCierre = parqueo.HoraCierre;
+                findParqueo.TarifaHora = parqueo.TarifaHora;
+                findParqueo.TarifaMediaHora = parqueo.TarifaMediaHora;
+
+                // Se edita el registro
+                _parqueoEntity.Entry(findParqueo).State = EntityState.Modified;
+
+                // Se valida que se edita correctamente
+                if (_parqueoEntity.SaveChanges() == 1)
+                {
+                    return new ResponseGeneric<List<Models.Parqueos.Parqueo>>(formatParqueos(_parqueoEntity.Parqueos.ToList()));
+                }
+                else
+                {
+                    return new ResponseGeneric<List<Models.Parqueos.Parqueo>>("Error en el editar un parqueo");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ResponseGeneric<List<Models.Parqueos.Parqueo>> searchValue(string valor, Models.Enums.EnumSearchParqueo tipo)
+        {
+            try
+            {
+                List<Models.DTOs.Parqueo> searchParqueos = new List<Models.DTOs.Parqueo>();
                 switch (tipo)
                 {
                     case Models.Enums.EnumSearchParqueo.Nombre:
-                        GlobalVariables.ParqueosFiltrados = GlobalVariables.Parqueos.Where(parqueo => parqueo.Nombre.Contains(valor)).ToList();
+                        searchParqueos = _parqueoEntity.Parqueos.Where(parqueo => parqueo.Nombre.Contains(valor)).ToList();
                         break;
 
                     case Models.Enums.EnumSearchParqueo.CantididadVehiculos:
-                        GlobalVariables.ParqueosFiltrados = GlobalVariables.Parqueos.Where(parqueo => parqueo.CantidadMaximaVehiculos == Int32.Parse(valor)).ToList();
+                        searchParqueos = _parqueoEntity.Parqueos.Where(parqueo => parqueo.CantidadMaximaVehiculos == Int32.Parse(valor)).ToList();
                         break;
 
                     case Models.Enums.EnumSearchParqueo.Tarifa:
-                        GlobalVariables.ParqueosFiltrados = GlobalVariables.Parqueos.Where(parqueo => parqueo.TarifaHora == Int32.Parse(valor) || parqueo.TarifaMediaHora == Int32.Parse(valor)).ToList();
+                        searchParqueos = _parqueoEntity.Parqueos.Where(parqueo => parqueo.TarifaHora == Int32.Parse(valor) || parqueo.TarifaMediaHora == Int32.Parse(valor)).ToList();
                         break;
                 }
 
-                return new ResponseGeneric<List<Parqueo>>(GlobalVariables.ParqueosFiltrados);
+                return new ResponseGeneric<List<Models.Parqueos.Parqueo>>(formatParqueos(searchParqueos));
             }
             catch (Exception ex)
             {
@@ -108,11 +144,40 @@ namespace DataAccess.Class
             }
         }
 
-        public ResponseGeneric<List<Parqueo>> getAll()
+        public ResponseGeneric<List<Models.Parqueos.Parqueo>> getAll()
         {
             try
             {
-                return new ResponseGeneric<List<Parqueo>>(GlobalVariables.Parqueos);
+                return new ResponseGeneric<List<Models.Parqueos.Parqueo>>(formatParqueos(_parqueoEntity.Parqueos.ToList()));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private List<Models.Parqueos.Parqueo> formatParqueos(List<Models.DTOs.Parqueo> parqueos)
+        {
+            try
+            {
+                List<Models.Parqueos.Parqueo> allParqueos = new List<Models.Parqueos.Parqueo>();
+
+                foreach (Models.DTOs.Parqueo parqueo in parqueos)
+                {
+                    allParqueos.Add(new Models.Parqueos.Parqueo()
+                    {
+                        idParqueo = parqueo.Idparqueo,
+                        Nombre = parqueo.Nombre,
+                        CantidadMaximaVehiculos = parqueo.CantidadMaximaVehiculos ?? 0,
+                        HoraApertura = parqueo.HoraApertura ?? DateTime.Now,
+                        HoraCierre = parqueo.HoraCierre ?? DateTime.Now,
+                        TarifaHora = (parqueo.TarifaHora != null) ? (float)parqueo.TarifaHora : 0,
+                        TarifaMediaHora = (parqueo.TarifaMediaHora != null) ? (float)parqueo.TarifaMediaHora : 0,
+                    });
+                }
+
+                return allParqueos;
+
             }
             catch (Exception ex)
             {
