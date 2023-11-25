@@ -21,10 +21,10 @@ namespace BusinessLogic.Class
             _Estadistica = Estadistica;
         }
 
-        public ResponseGeneric<Estadistica> addValue(Venta venta)
-        {
-            return _Estadistica.addValue(venta);
-        }
+        //public ResponseGeneric<Estadistica> addValue(Venta venta)
+        //{
+        //    return _Estadistica.addValue(venta);
+        //}
 
         public ResponseGeneric<Estadistica> searchValue(string valor, EnumSearchEstadistica tipo)
         {

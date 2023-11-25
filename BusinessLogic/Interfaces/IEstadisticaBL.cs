@@ -8,7 +8,7 @@ namespace BusinessLogic.Interfaces
 {
     public interface IEstadisticaBL
     {
-        Models.General.ResponseGeneric<Models.Estadistica.Estadistica> addValue(Models.Estadistica.Venta venta);
+        //Models.General.ResponseGeneric<Models.Estadistica.Estadistica> addValue(Models.Estadistica.Venta venta);
 
         Models.General.ResponseGeneric<Models.Estadistica.Estadistica> searchValue(string valor, Models.Enums.EnumSearchEstadistica tipo);
 

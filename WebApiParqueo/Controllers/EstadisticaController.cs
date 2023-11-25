@@ -15,19 +15,19 @@ namespace WebApiParqueo.Controllers
             this._estadisticaBL = estadisticaBL;
         }
 
-        [HttpPost]
-        [Route("/api/[controller]/[action]")]
-        public ResponseGeneric<Estadistica> Create([FromBody] Venta venta)
-        {
-            try
-            {
-                return _estadisticaBL.addValue(venta);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseGeneric<Estadistica>(ex);
-            }
-        }
+        //[HttpPost]
+        //[Route("/api/[controller]/[action]")]
+        //public ResponseGeneric<Estadistica> Create([FromBody] Venta venta)
+        //{
+        //    try
+        //    {
+        //        return _estadisticaBL.addValue(venta);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ResponseGeneric<Estadistica>(ex);
+        //    }
+        //}
 
         [HttpPost]
         [Route("/api/[controller]/[action]")]
